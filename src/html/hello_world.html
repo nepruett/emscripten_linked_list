@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hello World Page</title>
+  <script src="../../build/js/hello_world.js"></script>
+</head>
+<body>
+  <script>
+    var hello = Module.cwrap('hello', 'string');
+    document.write(hello());
+  </script>
+</body>
+</html>
