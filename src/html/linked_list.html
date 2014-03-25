@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Linked List Page</title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
+  <script src="../../build/js/linked_list.js"></script>
+</head>
+<body>
+<div id="display" style="border: 3px solid black; padding: 3px;"></div>
+<div id="controls">
+  Item: <input id="itemField" type="text"/><button id="addBtn">Add</button><button id="removeBtn">Remove</button>
+</div>
+<script>
+  var new_node = Module.cwrap('ll_new_node', 'object', ['string'])
+  var value = Module.cwrap('ll_value', 'string', ['object']);
+  var next = Module.cwrap('ll_next', 'object', ['object']);
+  var add = Module.cwrap('ll_add', 'object', ['object', 'string']);
+  var remove = Module.cwrap('ll_remove', 'object', ['object', 'string']);
+  var list = 0;
+  Zepto(function($){
+
+    var printList = function() {
+      var node = list;
+      var s = "head -> ";
+      while (node != null && node != 0) {
+        s = s + value(node) + " -> ";
+        node = next(node);
+      }
+      s = s + "NULL";
+      $('#display').text(s);
+    };
+    printList();
+    $('#addBtn').on('click', function() {
+      var add_value = $('#itemField').val();
+      if (add_value && add_value.length > 0) {
+        list = add(list, add_value);
+        printList();
+      }
+    });
+    $('#removeBtn').on('click', function() {
+      var remove_value = $('#itemField').val();
+      if (remove_value && remove_value.length > 0) {
+        list = remove(list, remove_value);
+        printList();
+      }
+    });
+  });
+</script>
+</body>
+</html>
