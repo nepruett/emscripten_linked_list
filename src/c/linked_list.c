@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "linked_list.h"
 
 /*
     ./emcc
@@ -8,12 +9,7 @@
         -o build/js/linked_list.js
         -s EXPORTED_FUNCTIONS="['_ll_new_node', '_ll_value', '_ll_next', '_ll_add', '_ll_remove']"
 */
-struct Node {
-    struct Node *next;
-    char *value;
-};
-
-extern struct Node *ll_new_node(char *value) {
+struct Node *ll_new_node(char *value) {
     struct Node *node;
     node = malloc(sizeof(struct Node));
     char *copy = malloc(sizeof(value));
@@ -22,12 +18,12 @@ extern struct Node *ll_new_node(char *value) {
     return node;
 }
 
-extern char *ll_value(struct Node *node) {
+char *ll_value(struct Node *node) {
     if(node == NULL) return NULL;
     return node->value;
 }
 
-extern struct Node *ll_next(struct Node *node) {
+struct Node *ll_next(struct Node *node) {
     if(node == NULL) return NULL;
     return node->next;
 }
@@ -40,7 +36,7 @@ struct Node *tail(struct Node *node) {
     return node;
 }
 
-extern struct Node *ll_add(struct Node *root, char *value) {
+struct Node *ll_add(struct Node *root, char *value) {
     struct Node *node = ll_new_node(value);
     if (root == NULL) {
         root = node;
@@ -50,11 +46,16 @@ extern struct Node *ll_add(struct Node *root, char *value) {
     return root;
 }
 
-extern struct Node *ll_remove(struct Node *root, char *value) {
+void ll_safe_delete(struct Node *node) {
+    free(node->value);
+    free(node);
+}
+
+struct Node *ll_remove(struct Node *root, char *value) {
     if (root == NULL) return NULL;
-    if (root->value == value) {
+    if (strcmp(root->value, value) == 0) {
         struct Node *next = root->next;
-        free(root);
+        ll_safe_delete(root);
         return next;
     }
     struct Node *node = root;
@@ -62,8 +63,7 @@ extern struct Node *ll_remove(struct Node *root, char *value) {
         if (strcmp(node->next->value, value) == 0) {
             struct Node *temp = node->next;
             node->next = temp->next;
-            free(temp->value);
-            free(temp);
+            ll_safe_delete(temp);
             break;
         }
         node = node->next;
