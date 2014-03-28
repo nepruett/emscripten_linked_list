@@ -9,6 +9,8 @@
 <div id="display" style="border: 3px solid black; padding: 3px;"></div>
 <div id="controls">
   Item: <input id="itemField" type="text"/><button id="addBtn">Add</button><button id="removeBtn">Remove</button>
+  <br/>
+  Sort: <button id="bubble_sort">Bubble Sort</button>
 </div>
 <script>
   var new_node = Module.cwrap('ll_new_node', 'object', ['string'])
@@ -16,6 +18,8 @@
   var next = Module.cwrap('ll_next', 'object', ['object']);
   var add = Module.cwrap('ll_add', 'object', ['object', 'string']);
   var remove = Module.cwrap('ll_remove', 'object', ['object', 'string']);
+  var bubbleSort = Module.cwrap('bubble_sort', 'object', ['object']);
+  var setCallback = Module.cwrap('set_callback', 'void', ['pointer']);
   var list = 0;
   Zepto(function($){
 
@@ -29,6 +33,10 @@
       s = s + "NULL";
       $('#display').text(s);
     };
+    var functionPtr = Runtime.addFunction(function(textPtr, listPtr) {
+      console.log("In callback - " + Pointer_stringify(textPtr));
+    });
+    setCallback(functionPtr);
     printList();
     $('#addBtn').on('click', function() {
       var add_value = $('#itemField').val();
@@ -43,6 +51,10 @@
         list = remove(list, remove_value);
         printList();
       }
+    });
+    $('#bubble_sort').on('click', function() {
+      list = bubbleSort(list);
+      printList();
     });
   });
 </script>
