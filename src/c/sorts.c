@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "linked_list.h"
+#include "sorts.h"
 
 /*
     ./emcc
@@ -11,10 +11,14 @@
     -s RESERVED_FUNCTION_POINTERS=1
 */
 
-void (*callback)(char *, struct Node *);
-
-void set_callback(void (*f)(char *, struct Node *)) {
+void set_callback(callback_t f)) {
     callback = f;
+}
+
+void safe_callback(const char *message, struct Node *list) {
+    if(callback != NULL) {
+        (*callback)(message, list);
+    }
 }
 
 void swap(struct Node *a, struct Node *b)
