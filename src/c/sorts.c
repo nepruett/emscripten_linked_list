@@ -21,6 +21,16 @@ void safe_callback(const char *message, struct Node *list) {
     }
 }
 
+void swap_message(struct Node *a, struct Node *b, struct Node *list) {
+    char str[80];
+    strcpy(str, "swapping ");
+    strcat(str, a->value);
+    strcat(str, " and ");
+    strcat(str, b->value);
+    strcat(str, "\n");
+    safe_callback(str, list);
+}
+
 void swap(struct Node *a, struct Node *b)
 {
     char *temp = a->value;
@@ -35,6 +45,7 @@ struct Node *naive_bubble_sort(struct Node *list) {
     for(i = list; i->next != NULL; i = i->next) {
         for(j = list; j->next != NULL; j = j->next) {
             if(strcmp(j->value, j->next->value) > 0) {
+                swap_message(j, j->next, list);
                 swap(j, j->next);
             }
         }
