@@ -28,9 +28,22 @@ void swap(struct Node *a, struct Node *b)
     b->value = temp;
 }
 
+struct Node *naive_bubble_sort(struct Node *list) {
+    safe_callback("Doing naive_bubble_sort!");
+    if(list == NULL) return NULL;
+    struct Node *i, *j;
+    for(i = list; i->next != NULL; i = i->next) {
+        for(j = list; j->next != NULL; j = j->next) {
+            if(strcmp(j->value, j->next->value) > 0) {
+                swap(j, j->next);
+            }
+        }
+    }
+    return list;
+}
+
 struct Node *bubble_sort(struct Node *list) {
-    printf("Doing BubbleSort!\n");
-    (*callback)("callback message", list);
+    safe_callback("Doing BubbleSort!\n", list);
 
     int swapped;
     struct Node *temp;
