@@ -29,7 +29,7 @@ void swap(struct Node *a, struct Node *b)
 }
 
 struct Node *naive_bubble_sort(struct Node *list) {
-    safe_callback("Doing naive_bubble_sort!");
+    safe_callback("Doing naive_bubble_sort!", list);
     if(list == NULL) return NULL;
     struct Node *i, *j;
     for(i = list; i->next != NULL; i = i->next) {
